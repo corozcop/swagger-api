@@ -1,0 +1,639 @@
+---
+swagger: "2.0"
+info:
+  description: "API sistema de autenticacion de usuarios"
+  version: "1.0.0"
+  title: "API Usuarios"
+  contact:
+    email: "experttyce@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "windy-city-139715.appspot.com"
+basePath: "/api/v1"
+tags:
+- name: "users"
+  description: "Registro e identificacion de usuarios"
+- name: "branch"
+  description: "Catalogo de branch"
+- name: "warehouse"
+  description: "Catalogo de warehouse"
+schemes:
+- "https"
+paths:
+  /user/{_id}:
+    get:
+      tags:
+      - "users"
+      summary: "Obtiene los datos de un usuario"
+      description: "Datos del usuario"
+      operationId: "user_idGET"
+      produces:
+      - "applications/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/users"
+      x-swagger-router-controller: "Users"
+    put:
+      tags:
+      - "users"
+      summary: "Actualiza los datos del usuario"
+      description: "Actualizacion de usuarios, asignacion de grupo, branch o whs"
+      operationId: "user_idPUT"
+      parameters:
+      - name: "_id"
+        in: "path"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        description: "registra nuevo warehouse"
+        required: true
+        schema:
+          $ref: "#/definitions/body"
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Users"
+  /users/:
+    get:
+      tags:
+      - "users"
+      summary: "Listado de usuarios"
+      description: "Lista de usuarios, grupos, branch y whs"
+      operationId: "usersGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/users"
+      x-swagger-router-controller: "Users"
+  /register/:
+    post:
+      tags:
+      - "users"
+      summary: "Registro de usuarios"
+      description: "Nuevos usuarios"
+      operationId: "registerPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "registra nuevo usuario"
+        required: true
+        schema:
+          $ref: "#/definitions/body_1"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/inline_response_200"
+        409:
+          description: "Conflicto"
+          schema:
+            $ref: "#/definitions/inline_response_409"
+      x-swagger-router-controller: "Users"
+  /auth/:
+    post:
+      tags:
+      - "users"
+      summary: "Login de usuario"
+      description: "Correo y contraseña para loguearse"
+      operationId: "authPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "username"
+        in: "query"
+        description: "email del usuario"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "Contraseña en texto plano"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/inline_response_200_1"
+      x-swagger-router-controller: "Users"
+  /warehouses/:
+    get:
+      tags:
+      - "warehouse"
+      summary: "Regresa lista de warehouses"
+      description: "Lista de nombres de warehouse"
+      operationId: "warehousesGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/cat_warehouse"
+      x-swagger-router-controller: "Warehouse"
+  /warehouse/{_id}:
+    get:
+      tags:
+      - "warehouse"
+      summary: "Obtiene los datos de un warehouse"
+      description: "Datos de warehouse"
+      operationId: "warehouse_idGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/cat_warehouse"
+      x-swagger-router-controller: "Warehouse"
+    put:
+      tags:
+      - "warehouse"
+      summary: "Actualiza warehouse"
+      operationId: "warehouse_idPUT"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        description: "registra nuevo warehouse"
+        required: true
+        schema:
+          $ref: "#/definitions/body_2"
+      responses:
+        200:
+          description: "OK"
+      x-swagger-router-controller: "Warehouse"
+  /warehouse/:
+    post:
+      tags:
+      - "warehouse"
+      summary: "Registra nuevo warehouse"
+      description: "Inserta warehouse"
+      operationId: "warehousePOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "registra nuevo warehouse"
+        required: true
+        schema:
+          $ref: "#/definitions/body_3"
+      responses:
+        201:
+          description: "Creado"
+          schema:
+            $ref: "#/definitions/inline_response_201"
+      x-swagger-router-controller: "Warehouse"
+  /groups/:
+    get:
+      tags:
+      - "group"
+      summary: "Regresa la lista de grupos"
+      description: "Lista de grupos"
+      operationId: "groupsGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/groups"
+      x-swagger-router-controller: "Group"
+  /group/:
+    post:
+      tags:
+      - "group"
+      summary: "Registra nuevo grupo"
+      description: "Grupo de usuarios o roles"
+      operationId: "groupPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "registra nuevo grupo"
+        required: true
+        schema:
+          $ref: "#/definitions/body_4"
+      responses:
+        201:
+          description: "Creado"
+          schema:
+            $ref: "#/definitions/inline_response_201_1"
+      x-swagger-router-controller: "Group"
+  /group/{_id}:
+    get:
+      tags:
+      - "group"
+      summary: "Regresa los datos de un grupo"
+      description: "Grupo de usuarios o rol"
+      operationId: "group_idGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/groups"
+      x-swagger-router-controller: "Group"
+    put:
+      tags:
+      - "group"
+      summary: "Actualiza los datos del grupo"
+      description: "Grupos de usuarios o rol"
+      operationId: "group_idPUT"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        description: "registra nuevo grupo"
+        required: true
+        schema:
+          $ref: "#/definitions/body_5"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "no encontrado"
+          schema:
+            $ref: "#/definitions/inline_response_404"
+      x-swagger-router-controller: "Group"
+  /branches/:
+    get:
+      tags:
+      - "branch"
+      summary: "Regresa la lista de branches"
+      description: "Lista nombres"
+      operationId: "branchesGET"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/cat_branch"
+      x-swagger-router-controller: "Branch"
+  /branch/:
+    post:
+      tags:
+      - "branch"
+      summary: "Inserta nuevo branch"
+      operationId: "branchPOST"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "nombre branch"
+        required: true
+        schema:
+          $ref: "#/definitions/body_6"
+      responses:
+        201:
+          description: "creado"
+          schema:
+            $ref: "#/definitions/inline_response_201_2"
+      x-swagger-router-controller: "Branch"
+  /branch/{_id}:
+    get:
+      tags:
+      - "branch"
+      summary: "Regresa los datos de un branch por ID"
+      description: "Datos del branch"
+      operationId: "branch_idGET"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "correcto"
+          schema:
+            $ref: "#/definitions/cat_branch"
+        404:
+          description: "no encontrado"
+          schema:
+            $ref: "#/definitions/inline_response_404_1"
+      x-swagger-router-controller: "Branch"
+    put:
+      tags:
+      - "branch"
+      summary: "Actualiza un registro"
+      operationId: "branch_idPUT"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "_id"
+        in: "path"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "body"
+        description: "Updated user object"
+        required: true
+        schema:
+          $ref: "#/definitions/body_7"
+      responses:
+        200:
+          description: "correcto"
+          schema:
+            $ref: "#/definitions/inline_response_200_2"
+        404:
+          description: "no encontrado"
+          schema:
+            $ref: "#/definitions/inline_response_404_1"
+      x-swagger-router-controller: "Branch"
+definitions:
+  groups:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      name:
+        type: "string"
+      description:
+        type: "string"
+  cat_warehouse:
+    type: "object"
+    properties:
+      idwhs:
+        type: "integer"
+      whs_name:
+        type: "string"
+      whs_status:
+        type: "integer"
+      whs_dtsstatus:
+        type: "integer"
+  users:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+      first_name:
+        type: "string"
+      last_name:
+        type: "string"
+      password:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+      company:
+        type: "string"
+      ip_address:
+        type: "string"
+      username:
+        type: "string"
+      salt:
+        type: "string"
+      activation_code:
+        type: "string"
+      forgotten_password_code:
+        type: "string"
+      forgotten_password_time:
+        type: "string"
+        format: "date-time"
+      remember_code:
+        type: "string"
+      created_on:
+        type: "string"
+        format: "date-time"
+      last_login:
+        type: "string"
+        format: "date-time"
+      active:
+        type: "integer"
+      phone:
+        type: "string"
+      photo:
+        type: "string"
+      groups:
+        $ref: "#/definitions/groups"
+      warehouse:
+        $ref: "#/definitions/cat_warehouse"
+      branch:
+        $ref: "#/definitions/cat_branch"
+  cat_branch:
+    type: "object"
+    properties:
+      idbranch:
+        type: "integer"
+      branch_name:
+        type: "string"
+    example:
+      id: 1
+      branch_name: "SDS"
+  body:
+    type: "object"
+    properties:
+      first_name:
+        type: "string"
+      last_name:
+        type: "string"
+      password:
+        type: "string"
+      email:
+        type: "string"
+      company:
+        type: "string"
+      ip_address:
+        type: "string"
+      username:
+        type: "string"
+      salt:
+        type: "string"
+      activation_code:
+        type: "string"
+      forgotten_password_code:
+        type: "string"
+      forgotten_password_time:
+        type: "string"
+      remember_code:
+        type: "string"
+      last_login:
+        type: "string"
+      active:
+        type: "string"
+      phone:
+        type: "string"
+      photo:
+        type: "string"
+      groups:
+        type: "array"
+        example:
+        - 1
+        - 2
+        - 3
+        items:
+          type: "integer"
+          format: "int64"
+      branch:
+        type: "array"
+        example:
+        - 1
+        - 2
+        - 3
+        items:
+          type: "integer"
+          format: "int64"
+      warehouse:
+        type: "array"
+        example:
+        - 1
+        - 2
+        - 3
+        items:
+          type: "integer"
+          format: "int64"
+  body_1:
+    type: "object"
+    properties:
+      first_name:
+        type: "string"
+      last_name:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+  inline_response_200:
+    properties:
+      message:
+        type: "string"
+    example: "{\"message\":\"Usuario registrado\"}"
+  inline_response_409:
+    properties:
+      message:
+        type: "string"
+    example: "{\"message\":\"Correo ya existe\"}"
+  inline_response_200_1:
+    properties:
+      access_token:
+        type: "string"
+    example: "{\"access_token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1MDg2NTExNTEsImlhdCI6MTUwODY1MDg1MSwibmJmIjoxNTA4NjUwODUxLCJpZGVudGl0eSI6MX0.0AeyzLGk-tb0Szb-C3yTfmuET43TAWoWyGE1MXcSbU8\"\
+      }"
+  body_2:
+    type: "object"
+    properties:
+      whs_name:
+        type: "string"
+      whs_status:
+        type: "integer"
+      whs_dtsstatus:
+        type: "integer"
+    example:
+      whs_name: "SEKO-LAX"
+      whs_status: 1
+      whs_dtsstatus: 1
+  body_3:
+    type: "object"
+    properties:
+      whs_name:
+        type: "string"
+    example:
+      whs_name: "SEKO-LAX"
+  inline_response_201:
+    properties:
+      message:
+        type: "string"
+    example: "{\"message\":\"Warehouse creado\"}"
+  body_4:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+    example:
+      name: "Admin"
+      description: "Super Usuarios"
+  inline_response_201_1:
+    properties:
+      message:
+        type: "string"
+    example: "{\"message\":\"Grupo creado\"}"
+  body_5:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+      description:
+        type: "string"
+    example:
+      name: "Admin"
+      description: "Super Usuarios"
+  inline_response_404:
+    properties:
+      message:
+        type: "string"
+    example: "{\"message\":\"Grupo no encontrado\"}"
+  body_6:
+    type: "object"
+    properties:
+      branch_name:
+        type: "string"
+    example:
+      branch_name: "SFO"
+  inline_response_201_2:
+    properties:
+      message:
+        type: "string"
+    example: "{\"message\":\"Branch creado\"}"
+  inline_response_404_1:
+    properties:
+      message:
+        type: "string"
+    example: "{\"message\":\"Branch no encontrado\"}"
+  body_7:
+    type: "object"
+    properties:
+      branch_name:
+        type: "string"
+    example:
+      branch_name: "SFO"
+  inline_response_200_2:
+    properties:
+      message:
+        type: "string"
+    example: "{\"message\":\"Branch actualizado\"}"
